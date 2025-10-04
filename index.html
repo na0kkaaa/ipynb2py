@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jupyter Notebook → .py 変換（ブラウザでローカル処理）</title>
+  <meta name="description" content="Jupyter .ipynb をブラウザ内だけで .py に変換します（nbconvertの簡易互換）。アップロード→変換→ダウンロード。サーバ送信なし。" />
+
+  <!-- ▼▼ Google AdSense（Auto ads）: あなたの publisher ID に置き換えてください ▼▼ -->
+  <!-- 本番運用時は、https/独自ドメインで公開し、サイト審査を通したうえで使用してください。 -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-REPLACE_WITH_YOUR_PUBLISHER_ID" crossorigin="anonymous"></script>
+  <!-- ▲▲ Google AdSense ▲▲ -->
+
+  <style>
+    :root {
+      --bg: #0b0f18;           /* ダーク */
+      --panel: #111827;        /* パネル */
+      --acc: #2563eb;          /* アクセント */
+      --text: #e5e7eb;         /* 文字 */
+      --muted: #9ca3af;        /* 補助文字 */
+      --ok: #10b981;           /* 成功 */
+      --warn: #f59e0b;         /* 注意 */
+      --err: #ef4444;          /* エラー */
+      --border: #1f2937;       /* 枠線 */
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, #0b0f18, #0b0f18 200px, #0b0f18 200px, #0b0f18);
+      color: var(--text);
+    }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom: 18px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .badge { font-size: 12px; color: var(--muted); background:#0b1220; border:1px solid var(--border); padding:2px 8px; border-radius: 999px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+
+    .grid { display:grid; grid-template-columns: 1fr; gap: 20px; }
+    @media (min-width: 840px) { .grid { grid-template-columns: 1.25fr .75fr; } }
+
+    .dropzone {
+      border: 2px dashed #334155; border-radius: 16px; padding: 28px; text-align:center; transition: all .2s ease; background: #0b1220;
+    }
+    .dropzone.dragover { border-color: var(--acc); background: #0f172a; }
+
+    .controls { display:flex; align-items:center; gap: 12px; flex-wrap: wrap; justify-content:center; margin-top: 12px; }
+    .btn { appearance:none; border:1px solid var(--border); background: #0f172a; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor:pointer; font-weight:600; }
+    .btn:hover { border-color: #334155; }
+    .btn-primary { background: var(--acc); border-color: transparent; }
+    .btn-primary:hover { filter: brightness(1.05); }
+
+    .meta { font-size: 14px; color: var(--muted); }
+    .list { display:grid; gap:10px; }
+    .kv { display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px dashed #1f2937; border-radius:10px; padding: 8px 10px; }
+    .kv strong { font-weight:700; }
+
+    .status { font-size: 14px; }
+    .ok { color: var(--ok); }
+    .warn { color: var(--warn); }
+    .err { color: var(--err); }
+
+    footer { color: var(--muted); margin-top: 22px; font-size: 13px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    /* 手動広告ユニットを置くならここに余白 */
+    .ad-block { display:block; min-height: 90px; margin: 10px 0; background: #0b1220; border:1px dashed #1f2937; border-radius:12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2l2.39 4.84 5.34.78-3.86 3.76.91 5.32L12 14.77 6.22 16.7l.91-5.32L3.27 7.62l5.34-.78L12 2z" fill="#60a5fa"/>
+        </svg>
+        <div>
+          <div style="font-size:20px; font-weight:800; letter-spacing:.2px;">Jupyter → .py 変換</div>
+          <div class="meta">ブラウザ内で完結（サーバ送信なし）</div>
+        </div>
+      </div>
+      <span class="badge">Free • Client‑side only</span>
+    </header>
+
+    <!-- ★ 手動広告ユニットを置く場合（任意）：ad-slot を設定して有効にしてください -->
+    <ins class="adsbygoogle ad-block"
+         style="display:block"
+         data-ad-client="ca-pub-REPLACE_WITH_YOUR_PUBLISHER_ID"
+         data-ad-slot="REPLACE_WITH_YOUR_AD_SLOT"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+
+    <main class="grid">
+      <section class="panel">
+        <h2 style="margin:0 0 8px 0;">1) .ipynb を選択 or ドロップ</h2>
+        <div id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="ファイルをドロップ、またはクリックして選択">
+          <div>ここに <strong>.ipynb</strong> をドロップ</div>
+          <div class="meta">またはクリックして選択</div>
+          <div class="controls">
+            <label class="btn">
+              ファイルを選択
+              <input id="fileInput" type="file" accept=".ipynb,application/json" hidden />
+            </label>
+            <button id="btnConvert" class="btn btn-primary" disabled>2) 変換してダウンロード</button>
+          </div>
+          <div class="controls" style="gap:16px;">
+            <label><input id="optMagics" type="checkbox" /> マジック/!行をコメントアウト</label>
+            <label><input id="optHeader" type="checkbox" checked /> ヘッダーコメントを付与</label>
+            <label><input id="optInTags" type="checkbox" checked /> セル見出し <code># In[n]:</code> を挿入</label>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <h3 style="margin-top:0;">ファイル情報</h3>
+        <div id="fileMeta" class="list meta">
+          <div class="kv"><strong>ファイル名</strong><span id="metaName">—</span></div>
+          <div class="kv"><strong>サイズ</strong><span id="metaSize">—</span></div>
+          <div class="kv"><strong>nbformat</strong><span id="metaNbformat">—</span></div>
+          <div class="kv"><strong>セル総数</strong><span id="metaCells">—</span></div>
+          <div class="kv"><strong>コードセル</strong><span id="metaCodeCells">—</span></div>
+          <div class="kv"><strong>出力行数</strong><span id="metaLines">—</span></div>
+        </div>
+        <hr style="border-color:#1f2937;">
+        <div id="status" class="status">準備中…</div>
+      </aside>
+    </main>
+
+    <footer>
+      <p>このツールはブラウザ内で完結し、ファイルは外部へ送信されません。出力は <code>nbconvert --to script</code> の挙動を参考にした簡易実装で、完全一致を保証するものではありません（必要に応じてマジック等をコメント化できます）。</p>
+      <p style="margin-top:8px;">広告ご利用時は、<strong>publisher ID / ad slot を必ず置き換え</strong>、サイトのプライバシーポリシーや <code>ads.txt</code> を整備してください。EEA/UK/CH では適法な同意管理（CMP + Consent Mode v2 等）が必要になる場合があります。</p>
+    </footer>
+  </div>
+
+  <script>
+    // ===== Utility =====
+    const $ = (sel) => document.querySelector(sel);
+    const fmtBytes = (n) => {
+      if (!Number.isFinite(n)) return "—";
+      const units = ['B','KB','MB','GB'];
+      let i=0; while(n >= 1024 && i < units.length-1){ n/=1024; i++; }
+      return `${n.toFixed( (i===0)?0:1 )} ${units[i]}`;
+    };
+    const download = (filename, text) => {
+      const blob = new Blob([text], { type: 'text/x-python;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+      setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 0);
+    };
+
+    // ===== Core converter =====
+    function ipynbToPy({ nb, filename, opts }) {
+      const cells = Array.isArray(nb.cells) ? nb.cells : [];
+      const lines = [];
+      if (opts.header) {
+        lines.push(
+          '#!/usr/bin/env python3',
+          '# coding: utf-8',
+          `# Converted from: ${filename}`,
+          `# Generated at  : ${new Date().toLocaleString()}`,
+        );
+      }
+      let idx = 1;
+      for (const cell of cells) {
+        if (cell.cell_type !== 'code') continue;
+        if (opts.inTags) lines.push('', `# In[${idx}]:`);
+        const src = Array.isArray(cell.source) ? cell.source.join('') : (cell.source || '');
+        let body = src.replace(/\r\n/g, '\n');
+        if (opts.magics) {
+          // 行頭の %, %%, ! をコメントアウト（インデント維持）
+          body = body.replace(/^(\s*)(%{1,2}|!)/gm, (m, g1) => `${g1}# ${m.trimStart()}`);
+        }
+        lines.push(body);
+        idx += 1;
+      }
+      return lines.join('\n');
+    }
+
+    // ===== State & DOM wiring =====
+    const state = { file: null, nb: null, codeCells: 0 };
+    const dropzone = $('#dropzone');
+    const fileInput = $('#fileInput');
+    const btnConvert = $('#btnConvert');
+    const statusEl = $('#status');
+
+    const setStatus = (msg, cls='') => {
+      statusEl.className = `status ${cls}`; statusEl.textContent = msg;
+    };
+
+    async function handleFile(file) {
+      try {
+        if (!file || !/\.ipynb$/i.test(file.name)) throw new Error('拡張子が .ipynb のファイルを選択してください');
+        setStatus('読み込み中…');
+        const text = await file.text();
+        let json;
+        try { json = JSON.parse(text); } catch (e) { throw new Error('JSON を解釈できません（壊れた .ipynb の可能性）'); }
+        if (!json.cells || !Array.isArray(json.cells)) throw new Error('Notebook 形式ではありません（cells 配列が見つかりません）');
+
+        state.file = file;
+        state.nb = json;
+        state.codeCells = json.cells.filter(c => c.cell_type === 'code').length;
+
+        // メタ表示
+        $('#metaName').textContent = file.name;
+        $('#metaSize').textContent = fmtBytes(file.size);
+        $('#metaNbformat').textContent = json.nbformat ? `${json.nbformat}${json.nbformat_minor!=null?'.'+json.nbformat_minor:''}` : '—';
+        $('#metaCells').textContent = json.cells.length;
+        $('#metaCodeCells').textContent = state.codeCells;
+        $('#metaLines').textContent = '—';
+
+        btnConvert.disabled = state.codeCells === 0;
+        setStatus(state.codeCells > 0 ? '準備できました。変換を実行できます。' : 'コードセルがありません。');
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || '読み込みに失敗しました', 'err');
+        btnConvert.disabled = true;
+      }
+    }
+
+    // Dropzone events
+    ;['dragenter','dragover'].forEach(ev => dropzone.addEventListener(ev, (e)=>{ e.preventDefault(); e.stopPropagation(); dropzone.classList.add('dragover'); }));
+    ;['dragleave','drop'].forEach(ev => dropzone.addEventListener(ev, (e)=>{ e.preventDefault(); e.stopPropagation(); dropzone.classList.remove('dragover'); }));
+    dropzone.addEventListener('drop', (e)=>{
+      const f = e.dataTransfer.files?.[0]; if (f) handleFile(f);
+    });
+    dropzone.addEventListener('click', ()=> fileInput.click());
+    fileInput.addEventListener('change', (e)=>{ const f = e.target.files?.[0]; if (f) handleFile(f); });
+
+    // Convert action
+    btnConvert.addEventListener('click', async ()=>{
+      if (!state.file || !state.nb) return;
+      try {
+        setStatus('変換中…');
+        const opts = {
+          magics: $('#optMagics').checked,
+          header: $('#optHeader').checked,
+          inTags: $('#optInTags').checked,
+        };
+        const py = ipynbToPy({ nb: state.nb, filename: state.file.name, opts });
+        const outName = state.file.name.replace(/\.ipynb$/i, '.py');
+        download(outName, py);
+        $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
+        setStatus('完了しました。ダウンロードを開始しました。', 'ok');
+      } catch (err) {
+        console.error(err);
+        setStatus(err.message || '変換に失敗しました', 'err');
+      }
+    });
+
+    // AdSense manual unit render（任意）
+    try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { /* ignore in dev */ }
+
+    // 初期表示
+    setStatus('ファイルを選択してください');
+  </script>
+</body>
+</html>
