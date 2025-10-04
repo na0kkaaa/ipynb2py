@@ -4,8 +4,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jupyter Notebook → .py 変換（ブラウザでローカル処理）</title>
-  <meta name="description" content="Jupyter .ipynb をブラウザ内だけで .py に変換します（nbconvertの簡易互換）。アップロード→変換→ダウンロード。サーバ送信なし。" />
+  <title>Jupyter Notebook → Python 変換ツール | 無料でブラウザ完結</title>
+  <meta name="description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に無料で変換。ブラウザ完結でサーバー送信なし。nbconvert互換の簡単ツール。" />
+  <meta name="keywords" content="Jupyter, Python, ipynb, 変換, nbconvert, Notebook, スクリプト, オンラインツール" />
+
+  <!-- Open Graph / SNS用メタタグ -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Jupyter Notebook → Python 変換ツール" />
+  <meta property="og:description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に無料で変換。ブラウザ完結でサーバー送信なし。" />
+  <meta property="og:site_name" content="Jupyter → .py 変換" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Jupyter Notebook → Python 変換ツール" />
+  <meta name="twitter:description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に無料で変換。" />
 
   <!-- Google AdSense (Auto ads) -->
   <!-- 本番運用時は、https/独自ドメインで公開し、サイト審査を通したうえで使用してください。 -->
@@ -16,23 +28,29 @@
 
 <body>
   <div class="container">
-    <!-- ヘッダー -->
     <header>
       <div class="brand">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true">
-          <path d="M12 2l2.39 4.84 5.34.78-3.86 3.76.91 5.32L12 14.77 6.22 16.7l.91-5.32L3.27 7.62l5.34-.78L12 2z"
-            fill="#60a5fa" />
-        </svg>
-        <div>
-          <div style="font-size:20px; font-weight:800; letter-spacing:.2px;">
-            Jupyter → .py 変換
+        <a href="index.html" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:12px;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true">
+            <path d="M12 2l2.39 4.84 5.34.78-3.86 3.76.91 5.32L12 14.77 6.22 16.7l.91-5.32L3.27 7.62l5.34-.78L12 2z"
+              fill="#60a5fa" />
+          </svg>
+          <div>
+            <div style="font-size:20px; font-weight:800; letter-spacing:.2px;">
+              Jupyter → .py 変換
+            </div>
           </div>
-          <div class="meta">ブラウザ内で完結（サーバ送信なし）</div>
-        </div>
+        </a>
       </div>
-      <span class="badge">Free • Client‑side only</span>
     </header>
+
+    <nav style="margin-bottom:24px;">
+      <a href="index.html" style="color:var(--text); text-decoration:none;">ホーム</a> |
+      <a href="how-to-use.html" style="color:var(--acc); text-decoration:none;">使い方</a> |
+      <a href="privacy.html" style="color:var(--acc); text-decoration:none;">プライバシーポリシー</a> |
+      <a href="terms.html" style="color:var(--acc); text-decoration:none;">利用規約</a>
+    </nav>
 
     <!-- メインコンテンツ -->
     <main class="grid">
@@ -107,11 +125,45 @@
       </aside>
     </main>
 
+    <!-- 説明セクション -->
+    <section class="panel" style="margin-top:24px;">
+      <h2>Jupyter Notebook を Python スクリプトに変換</h2>
+      <p>
+        当サイトは、Jupyter Notebook形式（.ipynb）のファイルを、通常のPythonスクリプト（.py）に変換する無料のオンラインツールです。
+        インストール不要で、ブラウザ上ですぐにご利用いただけます。
+      </p>
+      <h3 style="margin-top:20px;">主な特徴</h3>
+      <ul>
+        <li><strong>完全無料:</strong> すべての機能を無料でご利用いただけます</li>
+        <li><strong>プライバシー保護:</strong> ファイルはブラウザ内でのみ処理され、外部サーバーに送信されることは一切ありません</li>
+        <li><strong>簡単操作:</strong> ドラッグ&ドロップまたはクリックでファイルを選択し、ボタン一つで変換完了</li>
+        <li><strong>nbconvert互換:</strong> Jupyter公式の nbconvert ツールの動作を参考にした実装</li>
+        <li><strong>カスタマイズ可能:</strong> マジックコマンドのコメント化、ヘッダー追加など、オプションで出力をカスタマイズ</li>
+      </ul>
+      <h3 style="margin-top:20px;">こんな方におすすめ</h3>
+      <ul>
+        <li>Jupyter Notebookで作成したコードを、通常のPythonスクリプトとして実行したい</li>
+        <li>コマンドラインツールをインストールせずに、手軽に変換したい</li>
+        <li>データサイエンスや機械学習のコードを共有する際に、.py 形式に変換したい</li>
+        <li>CI/CDパイプラインで使用するため、Notebookをスクリプト化したい</li>
+      </ul>
+      <p style="margin-top:20px;">
+        詳しい使い方は<a href="how-to-use.html" style="color:var(--acc);">使い方ページ</a>をご覧ください。
+      </p>
+    </section>
+
     <!-- フッター -->
     <footer>
       <p>
         このツールはブラウザ内で完結し、ファイルは外部へ送信されません。出力は <code>nbconvert --to script</code>
         の挙動を参考にした簡易実装で、完全一致を保証するものではありません（必要に応じてマジック等をコメント化できます）。
+      </p>
+      <p style="margin-top:12px;">
+        <a href="privacy.html" style="color:var(--acc);">プライバシーポリシー</a> |
+        <a href="terms.html" style="color:var(--acc);">利用規約</a>
+      </p>
+      <p style="margin-top:12px; color:var(--muted); font-size:12px;">
+        &copy; 2025 Jupyter → .py 変換 All rights reserved.
       </p>
     </footer>
 
