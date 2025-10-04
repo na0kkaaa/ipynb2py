@@ -1,0 +1,53 @@
+:root {
+  --bg: #0b0f18;           /* ダーク */
+  --panel: #111827;        /* パネル */
+  --acc: #2563eb;          /* アクセント */
+  --text: #e5e7eb;         /* 文字 */
+  --muted: #9ca3af;        /* 補助文字 */
+  --ok: #10b981;           /* 成功 */
+  --warn: #f59e0b;         /* 注意 */
+  --err: #ef4444;          /* エラー */
+  --border: #1f2937;       /* 枠線 */
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, "Apple Color Emoji", "Segoe UI Emoji";
+  background: linear-gradient(180deg, #0b0f18, #0b0f18 200px, #0b0f18 200px, #0b0f18);
+  color: var(--text);
+}
+.container { max-width: 960px; margin: 0 auto; padding: 24px; }
+header { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom: 18px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.badge { font-size: 12px; color: var(--muted); background:#0b1220; border:1px solid var(--border); padding:2px 8px; border-radius: 999px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,.25); }
+
+.grid { display:grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 840px) { .grid { grid-template-columns: 1.25fr .75fr; } }
+
+.dropzone {
+  border: 2px dashed #334155; border-radius: 16px; padding: 28px; text-align:center; transition: all .2s ease; background: #0b1220;
+}
+.dropzone.dragover { border-color: var(--acc); background: #0f172a; }
+
+.controls { display:flex; align-items:center; gap: 12px; flex-wrap: wrap; justify-content:center; margin-top: 12px; }
+.btn { appearance:none; border:1px solid var(--border); background: #0f172a; color: var(--text); padding: 10px 14px; border-radius: 12px; cursor:pointer; font-weight:600; }
+.btn:hover { border-color: #334155; }
+.btn-primary { background: var(--acc); border-color: transparent; }
+.btn-primary:hover { filter: brightness(1.05); }
+
+.meta { font-size: 14px; color: var(--muted); }
+.list { display:grid; gap:10px; }
+.kv { display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px dashed #1f2937; border-radius:10px; padding: 8px 10px; }
+.kv strong { font-weight:700; }
+
+.status { font-size: 14px; }
+.ok { color: var(--ok); }
+.warn { color: var(--warn); }
+.err { color: var(--err); }
+
+footer { color: var(--muted); margin-top: 22px; font-size: 13px; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+/* 手動広告ユニットを置くならここに余白 */
+.ad-block { display:block; min-height: 90px; margin: 10px 0; background: #0b1220; border:1px dashed #1f2937; border-radius:12px; }
