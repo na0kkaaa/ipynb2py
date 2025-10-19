@@ -124,7 +124,7 @@ async function handleFile(file) {
     try {
       json = JSON.parse(text);
     } catch (e) {
-      throw new Error('JSON を解釈できません（壊れた .ipynb の可能性）');
+      throw new Error('壊れた .ipynb の可能性があります');
     }
 
     // Notebook 形式チェック
