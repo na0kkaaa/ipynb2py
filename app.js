@@ -103,9 +103,6 @@ const setStatus = (msg, cls = '') => {
 const updateFileMetadata = (file, json) => {
   $('#metaName').textContent = file.name;
   $('#metaSize').textContent = fmtBytes(file.size);
-  $('#metaNbformat').textContent = json.nbformat
-    ? `${json.nbformat}${json.nbformat_minor != null ? '.' + json.nbformat_minor : ''}`
-    : '—';
   $('#metaCells').textContent = json.cells.length;
   $('#metaCodeCells').textContent = state.codeCells;
   $('#metaLines').textContent = '—';
