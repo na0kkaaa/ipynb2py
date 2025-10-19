@@ -41,9 +41,22 @@ function ipynbToPy({ nb, filename, opts }) {
     );
   }
 
-  // コードセルを順次変換
+  // セルを順次変換
   let idx = 1;
   for (const cell of cells) {
+    // マークダウンセルをコメントアウト形式で変換
+    if (cell.cell_type === 'markdown') {
+      const src = Array.isArray(cell.source) ? cell.source.join('') : (cell.source || '');
+      const mdLines = src.replace(/\r\n/g, '\n').split('\n');
+
+      lines.push('');
+      for (const line of mdLines) {
+        lines.push(`# ${line}`);
+      }
+      continue;
+    }
+
+    // コードセルの処理
     if (cell.cell_type !== 'code') continue;
 
     // セル見出しの挿入
