@@ -75,32 +75,50 @@
           <div>ここに <strong>.ipynb</strong> をドロップ</div>
           <div class="meta">またはクリックして選択</div>
 
-          <!-- ファイル選択＆変換ボタン -->
+          <!-- ファイル選択ボタン -->
           <div class="controls">
             <label class="btn">
               ファイルを選択
               <input id="fileInput" type="file" accept=".ipynb,application/json" hidden />
             </label>
-            <button id="btnConvert" class="btn btn-primary" disabled>
-              2) 変換してダウンロード
-            </button>
           </div>
+        </div>
 
-          <!-- 変換オプション -->
-          <div class="controls" style="gap:16px;">
+        <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
+
+        <h2 style="margin:0 0 12px 0;">2) 出力方法を選択</h2>
+        <!-- 出力方法選択 -->
+        <div class="controls" style="gap:12px; margin-bottom:16px; flex-direction:column; align-items:flex-start;">
+          <label>
+            <input type="radio" name="convertMode" value="download" checked />
+            ファイルとしてダウンロード
+          </label>
+          <label>
+            <input type="radio" name="convertMode" value="copy" />
+            クリップボードにコピー
+          </label>
+        </div>
+
+        <!-- 変換オプション -->
+        <div style="margin-bottom:16px; margin-top:24px;">
+          <h3 style="margin:0 0 8px 0; font-size:14px; color:var(--muted);">オプション</h3>
+          <div class="controls" style="gap:12px; flex-direction:column; align-items:flex-start;">
             <label>
               <input id="optMagics" type="checkbox" />
               マジック/!行をコメントアウト
-            </label>
-            <label>
-              <input id="optHeader" type="checkbox" checked />
-              ヘッダーコメントを付与
             </label>
             <label>
               <input id="optInTags" type="checkbox" checked />
               セル見出し <code># In[n]:</code> を挿入
             </label>
           </div>
+        </div>
+
+        <!-- 変換実行ボタン -->
+        <div class="controls">
+          <button id="btnConvert" class="btn btn-primary" disabled style="padding:12px 32px; font-size:16px; font-weight:600;">
+            変換を実行
+          </button>
         </div>
       </section>
 
@@ -146,7 +164,7 @@
         <li><strong>ブラウザ完結:</strong> すべての処理がブラウザ内で完結します</li>
         <li><strong>プライバシー保護:</strong> ファイルはブラウザ内でのみ処理され、外部サーバーに送信されることは一切ありません</li>
         <li><strong>簡単操作:</strong> ドラッグ&ドロップまたはクリックでファイルを選択し、ボタン一つで変換完了</li>
-        <li><strong>カスタマイズ可能:</strong> マジックコマンドのコメント化、ヘッダー追加など、オプションで出力をカスタマイズ</li>
+        <li><strong>カスタマイズ可能:</strong> マジックコマンドのコメント化、セル見出しの挿入など、オプションで出力をカスタマイズ</li>
       </ul>
       <h3 style="margin-top:20px;">こんな方におすすめ</h3>
       <ul>

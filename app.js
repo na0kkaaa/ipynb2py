@@ -31,16 +31,6 @@ function ipynbToPy({ nb, filename, opts }) {
   const cells = Array.isArray(nb.cells) ? nb.cells : [];
   const lines = [];
 
-  // ヘッダーコメント追加
-  if (opts.header) {
-    lines.push(
-      '#!/usr/bin/env python3',
-      '# coding: utf-8',
-      `# Converted from: ${filename}`,
-      `# Generated at  : ${new Date().toLocaleString()}`,
-    );
-  }
-
   // セルを順次変換
   let idx = 1;
   for (const cell of cells) {
@@ -204,7 +194,6 @@ btnConvert.addEventListener('click', async () => {
     // オプション取得
     const opts = {
       magics: $('#optMagics').checked,
-      header: $('#optHeader').checked,
       inTags: $('#optInTags').checked,
     };
 
@@ -215,13 +204,53 @@ btnConvert.addEventListener('click', async () => {
       opts
     });
 
-    // ダウンロード
-    const outName = state.file.name.replace(/\.ipynb$/i, '.py');
-    download(outName, py);
+    // 変換方法の取得
+    const mode = document.querySelector('input[name="convertMode"]:checked').value;
 
-    // 出力行数更新
-    $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
-    setStatus('完了しました。ダウンロードを開始しました。', 'ok');
+    if (mode === 'download') {
+      // ダウンロード
+      const outName = state.file.name.replace(/\.ipynb$/i, '.py');
+      download(outName, py);
+      $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
+
+      // ボタンのテキストを一時的に変更
+      const originalText = btnConvert.textContent;
+      btnConvert.textContent = '✓ ダウンロード完了！';
+      btnConvert.style.backgroundColor = '#10b981';
+      btnConvert.style.color = '#ffffff';
+      btnConvert.style.borderColor = '#10b981';
+
+      setStatus('完了しました。ダウンロードを開始しました。', 'ok');
+
+      // 2秒後に元に戻す
+      setTimeout(() => {
+        btnConvert.textContent = originalText;
+        btnConvert.style.backgroundColor = '';
+        btnConvert.style.color = '';
+        btnConvert.style.borderColor = '';
+      }, 2000);
+    } else {
+      // クリップボードにコピー
+      await navigator.clipboard.writeText(py);
+      $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
+
+      // ボタンのテキストを一時的に変更
+      const originalText = btnConvert.textContent;
+      btnConvert.textContent = '✓ コピー完了！';
+      btnConvert.style.backgroundColor = '#10b981';
+      btnConvert.style.color = '#ffffff';
+      btnConvert.style.borderColor = '#10b981';
+
+      setStatus('完了しました。クリップボードにコピーしました。', 'ok');
+
+      // 2秒後に元に戻す
+      setTimeout(() => {
+        btnConvert.textContent = originalText;
+        btnConvert.style.backgroundColor = '';
+        btnConvert.style.color = '';
+        btnConvert.style.borderColor = '';
+      }, 2000);
+    }
   } catch (err) {
     console.error(err);
     setStatus(err.message || '変換に失敗しました', 'err');
