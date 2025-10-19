@@ -57,7 +57,7 @@
         <h2>このツールについて</h2>
         <p>
           「Jupyter → .py 変換」は、Jupyter Notebook形式（.ipynb）のファイルを、
-          通常のPythonスクリプト（.py）に変換する無料のWebツールです。
+          通常のPythonスクリプト（.py）に変換するWebツールです。
         </p>
         <p style="margin-top:12px;">
           <strong style="color:var(--ok);">特徴:</strong>
@@ -65,8 +65,6 @@
         <ul>
           <li>✅ ブラウザ内で完結（ファイルは外部に送信されません）</li>
           <li>✅ インストール不要で、すぐに使える</li>
-          <li>✅ 無料で利用可能</li>
-          <li>✅ nbconvert の簡易互換実装</li>
         </ul>
       </section>
 
@@ -145,10 +143,10 @@ plt.plot(x, y)</code></pre>
         <h2>よくある質問</h2>
 
         <div style="margin-top:16px;">
-          <h3 style="color:var(--acc);">Q. nbconvert との違いは？</h3>
+          <h3 style="color:var(--acc);">Q. どのような変換が行われますか？</h3>
           <p>
-            このツールは <code>nbconvert --to script</code> の挙動を参考にした簡易実装です。
-            基本的な変換は同じですが、複雑なマジックコマンドや特殊な記法には対応していない場合があります。
+            Jupyter Notebookのコードセルのみを抽出し、Pythonスクリプトとして出力します。
+            複雑なマジックコマンドや特殊な記法には対応していない場合があります。
           </p>
         </div>
 
@@ -167,14 +165,6 @@ plt.plot(x, y)</code></pre>
           </p>
         </div>
 
-        <div style="margin-top:16px;">
-          <h3 style="color:var(--acc);">Q. コマンドラインで変換したい場合は？</h3>
-          <p>
-            公式の nbconvert をご利用ください：
-          </p>
-          <pre style="background:var(--bg); padding:12px; border-radius:8px; margin-top:8px;"><code>pip install nbconvert
-jupyter nbconvert --to script your_notebook.ipynb</code></pre>
-        </div>
       </section>
 
       <section style="margin-top:32px;">
