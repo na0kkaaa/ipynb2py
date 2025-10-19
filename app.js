@@ -101,52 +101,52 @@ const updateFileMetadata = (file, json) => {
 // ===== File Handling =====
 async function handleFile(file) {
   try {
-    // ファイル拡張子チェック
+    // File extension check
     if (!file || !/\.ipynb$/i.test(file.name)) {
-      throw new Error('拡張子が .ipynb のファイルを選択してください');
+      throw new Error('Please select a file with .ipynb extension');
     }
 
-    setStatus('読み込み中…');
+    setStatus('Loading…');
     const text = await file.text();
 
-    // JSON パース
+    // JSON parse
     let json;
     try {
       json = JSON.parse(text);
     } catch (e) {
-      throw new Error('壊れた .ipynb の可能性があります');
+      throw new Error('File may be corrupted');
     }
 
-    // Notebook 形式チェック
+    // Notebook format check
     if (!json.cells || !Array.isArray(json.cells)) {
-      throw new Error('Notebook 形式ではありません（cells 配列が見つかりません）');
+      throw new Error('Not a valid Notebook format (cells array not found)');
     }
 
-    // 状態更新
+    // Update state
     state.file = file;
     state.nb = json;
     state.codeCells = json.cells.filter(c => c.cell_type === 'code').length;
 
-    // メタデータ表示更新
+    // Update metadata display
     updateFileMetadata(file, json);
 
-    // 変換ボタンの有効化
+    // Enable convert button
     btnConvert.disabled = state.codeCells === 0;
     setStatus(
       state.codeCells > 0
-        ? '準備できました。変換を実行できます。'
-        : 'コードセルがありません。'
+        ? 'Ready. You can convert now.'
+        : 'No code cells found.'
     );
   } catch (err) {
     console.error(err);
-    setStatus(err.message || '読み込みに失敗しました', 'err');
+    setStatus(err.message || 'Failed to load file', 'err');
     btnConvert.disabled = true;
   }
 }
 
 // ===== Event Listeners =====
 
-// ドラッグ&ドロップイベント
+// Drag & drop events
 ['dragenter', 'dragover'].forEach(ev => {
   dropzone.addEventListener(ev, (e) => {
     e.preventDefault();
@@ -168,61 +168,61 @@ dropzone.addEventListener('drop', (e) => {
   if (f) handleFile(f);
 });
 
-// Dropzone クリックイベント
+// Dropzone click event
 dropzone.addEventListener('click', (e) => {
-  // ボタンやラベル内のクリックは無視
+  // Ignore clicks on buttons or labels
   if (e.target === fileInput || e.target.closest('label') || e.target.closest('button')) {
     return;
   }
   fileInput.click();
 });
 
-// ファイル選択イベント
+// File selection event
 fileInput.addEventListener('change', (e) => {
   const f = e.target.files?.[0];
   if (f) handleFile(f);
-  fileInput.value = ''; // リセットして同じファイルを再選択可能に
+  fileInput.value = ''; // Reset to allow reselecting the same file
 });
 
-// 変換ボタンイベント
+// Convert button event
 btnConvert.addEventListener('click', async () => {
   if (!state.file || !state.nb) return;
 
   try {
-    setStatus('変換中…');
+    setStatus('Converting…');
 
-    // オプション取得
+    // Get options
     const opts = {
       magics: $('#optMagics').checked,
       inTags: $('#optInTags').checked,
     };
 
-    // 変換実行
+    // Execute conversion
     const py = ipynbToPy({
       nb: state.nb,
       filename: state.file.name,
       opts
     });
 
-    // 変換方法の取得
+    // Get conversion mode
     const mode = document.querySelector('input[name="convertMode"]:checked').value;
 
     if (mode === 'download') {
-      // ダウンロード
+      // Download
       const outName = state.file.name.replace(/\.ipynb$/i, '.py');
       download(outName, py);
       $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
 
-      // ボタンのテキストを一時的に変更
+      // Temporarily change button text
       const originalText = btnConvert.textContent;
-      btnConvert.textContent = '✓ ダウンロード完了！';
+      btnConvert.textContent = '✓ Download Complete!';
       btnConvert.style.backgroundColor = '#10b981';
       btnConvert.style.color = '#ffffff';
       btnConvert.style.borderColor = '#10b981';
 
-      setStatus('完了しました。ダウンロードを開始しました。', 'ok');
+      setStatus('Complete. Download started.', 'ok');
 
-      // 2秒後に元に戻す
+      // Restore after 2 seconds
       setTimeout(() => {
         btnConvert.textContent = originalText;
         btnConvert.style.backgroundColor = '';
@@ -230,20 +230,20 @@ btnConvert.addEventListener('click', async () => {
         btnConvert.style.borderColor = '';
       }, 2000);
     } else {
-      // クリップボードにコピー
+      // Copy to clipboard
       await navigator.clipboard.writeText(py);
       $('#metaLines').textContent = (py.split('\n').length).toLocaleString();
 
-      // ボタンのテキストを一時的に変更
+      // Temporarily change button text
       const originalText = btnConvert.textContent;
-      btnConvert.textContent = '✓ コピー完了！';
+      btnConvert.textContent = '✓ Copied!';
       btnConvert.style.backgroundColor = '#10b981';
       btnConvert.style.color = '#ffffff';
       btnConvert.style.borderColor = '#10b981';
 
-      setStatus('完了しました。クリップボードにコピーしました。', 'ok');
+      setStatus('Complete. Copied to clipboard.', 'ok');
 
-      // 2秒後に元に戻す
+      // Restore after 2 seconds
       setTimeout(() => {
         btnConvert.textContent = originalText;
         btnConvert.style.backgroundColor = '';
@@ -253,17 +253,17 @@ btnConvert.addEventListener('click', async () => {
     }
   } catch (err) {
     console.error(err);
-    setStatus(err.message || '変換に失敗しました', 'err');
+    setStatus(err.message || 'Conversion failed', 'err');
   }
 });
 
 // ===== Initialization =====
-// AdSense manual unit render（任意）
+// AdSense manual unit render (optional)
 try {
   (adsbygoogle = window.adsbygoogle || []).push({});
 } catch (e) {
   /* ignore in dev */
 }
 
-// 初期表示
-setStatus('ファイルを選択してください');
+// Initial display
+setStatus('Please select a file');

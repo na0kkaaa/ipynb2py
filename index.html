@@ -1,23 +1,23 @@
 <!doctype html>
-<html lang="ja">
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jupyter Notebook → Python 変換ツール</title>
-  <meta name="description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に変換。ブラウザ完結でサーバー送信なし。" />
-  <meta name="keywords" content="Jupyter, Python, ipynb, 変換, nbconvert, Notebook, スクリプト, オンラインツール" />
+  <title>Jupyter Notebook → Python Converter</title>
+  <meta name="description" content="Convert Jupyter Notebook (.ipynb) to Python script (.py). Works entirely in browser with no server uploads." />
+  <meta name="keywords" content="Jupyter, Python, ipynb, converter, nbconvert, Notebook, script, online tool" />
 
-  <!-- Open Graph / SNS用メタタグ -->
+  <!-- Open Graph / SNS Meta Tags -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Jupyter Notebook → Python 変換ツール" />
-  <meta property="og:description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に変換。ブラウザ完結でサーバー送信なし。" />
-  <meta property="og:site_name" content="Jupyter → .py 変換" />
+  <meta property="og:title" content="Jupyter Notebook → Python Converter" />
+  <meta property="og:description" content="Convert Jupyter Notebook (.ipynb) to Python script (.py). Works entirely in browser with no server uploads." />
+  <meta property="og:site_name" content="Jupyter → .py Converter" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Jupyter Notebook → Python 変換ツール" />
-  <meta name="twitter:description" content="Jupyter Notebook (.ipynb) を Python スクリプト (.py) に変換。" />
+  <meta name="twitter:title" content="Jupyter Notebook → Python Converter" />
+  <meta name="twitter:description" content="Convert Jupyter Notebook (.ipynb) to Python script (.py)." />
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -50,7 +50,7 @@
           </svg>
           <div>
             <div style="font-size:20px; font-weight:800; letter-spacing:.2px;">
-              Jupyter → .py 変換
+              Jupyter → .py Converter
             </div>
           </div>
         </a>
@@ -58,27 +58,27 @@
     </header>
 
     <nav style="margin-bottom:24px;">
-      <a href="index.html" style="color:var(--text); text-decoration:none;">ホーム</a> |
-      <a href="how-to-use.html" style="color:var(--acc); text-decoration:none;">使い方</a> |
-      <a href="contact.html" style="color:var(--acc); text-decoration:none;">お問い合わせ</a> |
-      <a href="privacy.html" style="color:var(--acc); text-decoration:none;">プライバシーポリシー</a> |
-      <a href="terms.html" style="color:var(--acc); text-decoration:none;">利用規約</a>
+      <a href="index.html" style="color:var(--text); text-decoration:none;">Home</a> |
+      <a href="how-to-use.html" style="color:var(--acc); text-decoration:none;">How to Use</a> |
+      <a href="contact.html" style="color:var(--acc); text-decoration:none;">Contact</a> |
+      <a href="privacy.html" style="color:var(--acc); text-decoration:none;">Privacy Policy</a> |
+      <a href="terms.html" style="color:var(--acc); text-decoration:none;">Terms of Service</a>
     </nav>
 
-    <!-- メインコンテンツ -->
+    <!-- Main Content -->
     <main class="grid">
-      <!-- ファイルアップロード＆変換セクション -->
+      <!-- File Upload & Convert Section -->
       <section class="panel">
-        <h2 style="margin:0 0 8px 0;">1) .ipynb を選択 or ドロップ</h2>
+        <h2 style="margin:0 0 8px 0;">1) Select or Drop .ipynb</h2>
         <div id="dropzone" class="dropzone" role="button" tabindex="0"
-          aria-label="ファイルをドロップ、またはクリックして選択">
-          <div>ここに <strong>.ipynb</strong> をドロップ</div>
-          <div class="meta">またはクリックして選択</div>
+          aria-label="Drop file here or click to select">
+          <div>Drop <strong>.ipynb</strong> here</div>
+          <div class="meta">Or click to select</div>
 
-          <!-- ファイル選択ボタン -->
+          <!-- File Selection Button -->
           <div class="controls">
             <label class="btn">
-              ファイルを選択
+              Choose File
               <input id="fileInput" type="file" accept=".ipynb,application/json" hidden />
             </label>
           </div>
@@ -86,114 +86,114 @@
 
         <hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">
 
-        <h2 style="margin:0 0 12px 0;">2) 出力方法を選択</h2>
-        <!-- 出力方法選択 -->
+        <h2 style="margin:0 0 12px 0;">2) Select Output Method</h2>
+        <!-- Output Method Selection -->
         <div class="controls" style="gap:12px; margin-bottom:16px; flex-direction:column; align-items:flex-start;">
           <label>
             <input type="radio" name="convertMode" value="download" checked />
-            ファイルとしてダウンロード
+            Download as File
           </label>
           <label>
             <input type="radio" name="convertMode" value="copy" />
-            クリップボードにコピー
+            Copy to Clipboard
           </label>
         </div>
 
-        <!-- 変換オプション -->
+        <!-- Conversion Options -->
         <div style="margin-bottom:16px; margin-top:24px;">
-          <h3 style="margin:0 0 8px 0; font-size:14px; color:var(--muted);">オプション</h3>
+          <h3 style="margin:0 0 8px 0; font-size:14px; color:var(--muted);">Options</h3>
           <div class="controls" style="gap:12px; flex-direction:column; align-items:flex-start;">
             <label>
               <input id="optMagics" type="checkbox" />
-              マジック/!行をコメントアウト
+              Comment out magic/! lines
             </label>
             <label>
               <input id="optInTags" type="checkbox" checked />
-              セル見出し <code># In[n]:</code> を挿入
+              Insert cell headers <code># In[n]:</code>
             </label>
           </div>
         </div>
 
-        <!-- 変換実行ボタン -->
+        <!-- Convert Button -->
         <div class="controls">
           <button id="btnConvert" class="btn btn-primary" disabled style="padding:12px 32px; font-size:16px; font-weight:600;">
-            変換を実行
+            Convert
           </button>
         </div>
       </section>
 
-      <!-- ファイル情報サイドバー -->
+      <!-- File Information Sidebar -->
       <aside class="panel">
-        <h3 style="margin-top:0;">ファイル情報</h3>
+        <h3 style="margin-top:0;">File Information</h3>
         <div id="fileMeta" class="list meta">
           <div class="kv">
-            <strong>ファイル名</strong>
+            <strong>Filename</strong>
             <span id="metaName">—</span>
           </div>
           <div class="kv">
-            <strong>サイズ</strong>
+            <strong>Size</strong>
             <span id="metaSize">—</span>
           </div>
           <div class="kv">
-            <strong>セル総数</strong>
+            <strong>Total Cells</strong>
             <span id="metaCells">—</span>
           </div>
           <div class="kv">
-            <strong>コードセル</strong>
+            <strong>Code Cells</strong>
             <span id="metaCodeCells">—</span>
           </div>
           <div class="kv">
-            <strong>出力行数</strong>
+            <strong>Output Lines</strong>
             <span id="metaLines">—</span>
           </div>
         </div>
         <hr style="border:none; border-top:1px solid var(--border); margin:16px 0;">
-        <div id="status" class="status">準備中…</div>
+        <div id="status" class="status">Ready…</div>
       </aside>
     </main>
 
     <!-- 説明セクション -->
     <section class="panel" style="margin-top:24px;">
-      <h2>Jupyter Notebook を Python スクリプトに変換</h2>
+      <h2>Convert Jupyter Notebook to Python Script</h2>
       <p>
-        当サイトは、Jupyter Notebook形式（.ipynb）のファイルを、通常のPythonスクリプト（.py）に変換するオンラインツールです。
-        インストール不要で、ブラウザ上ですぐにご利用いただけます。
+        This site is an online tool that converts Jupyter Notebook files (.ipynb) to standard Python scripts (.py).
+        No installation required - use it instantly in your browser.
       </p>
-      <h3 style="margin-top:20px;">主な特徴</h3>
+      <h3 style="margin-top:20px;">Key Features</h3>
       <ul>
-        <li><strong>ブラウザ完結:</strong> すべての処理がブラウザ内で完結します</li>
-        <li><strong>プライバシー保護:</strong> ファイルはブラウザ内でのみ処理され、外部サーバーに送信されることは一切ありません</li>
-        <li><strong>簡単操作:</strong> ドラッグ&ドロップまたはクリックでファイルを選択し、ボタン一つで変換完了</li>
-        <li><strong>カスタマイズ可能:</strong> マジックコマンドのコメント化、セル見出しの挿入など、オプションで出力をカスタマイズ</li>
+        <li><strong>Browser-Based:</strong> All processing is done entirely in your browser</li>
+        <li><strong>Privacy Protected:</strong> Files are processed only in your browser and never sent to external servers</li>
+        <li><strong>Easy to Use:</strong> Simply drag & drop or click to select a file, then convert with one button</li>
+        <li><strong>Customizable:</strong> Customize output with options like commenting magic commands and inserting cell headers</li>
       </ul>
-      <h3 style="margin-top:20px;">こんな方におすすめ</h3>
+      <h3 style="margin-top:20px;">Perfect For</h3>
       <ul>
-        <li>Jupyter Notebookで作成したコードを、通常のPythonスクリプトとして実行したい</li>
-        <li>コマンドラインツールをインストールせずに、手軽に変換したい</li>
-        <li>データサイエンスや機械学習のコードを共有する際に、.py 形式に変換したい</li>
-        <li>CI/CDパイプラインで使用するため、Notebookをスクリプト化したい</li>
+        <li>Running code created in Jupyter Notebook as a standard Python script</li>
+        <li>Converting easily without installing command-line tools</li>
+        <li>Sharing data science or machine learning code in .py format</li>
+        <li>Converting Notebooks to scripts for CI/CD pipelines</li>
       </ul>
       <p style="margin-top:20px;">
-        詳しい使い方は<a href="how-to-use.html" style="color:var(--acc);">使い方ページ</a>をご覧ください。
+        For detailed instructions, see the <a href="how-to-use.html" style="color:var(--acc);">How to Use page</a>.
       </p>
     </section>
 
-    <!-- フッター -->
+    <!-- Footer -->
     <footer>
       <p>
-        このツールはブラウザ内で完結し、ファイルは外部へ送信されません。
+        This tool works entirely in your browser and files are never sent externally.
       </p>
       <p style="margin-top:12px;">
-        <a href="privacy.html" style="color:var(--acc);">プライバシーポリシー</a> |
-        <a href="terms.html" style="color:var(--acc);">利用規約</a>
+        <a href="privacy.html" style="color:var(--acc);">Privacy Policy</a> |
+        <a href="terms.html" style="color:var(--acc);">Terms of Service</a>
       </p>
       <p style="margin-top:12px; color:var(--muted); font-size:12px;">
-        &copy; 2025 Jupyter → .py 変換 All rights reserved.
+        &copy; 2025 Jupyter → .py Converter All rights reserved.
       </p>
     </footer>
   </div>
 
-  <!-- アプリケーションスクリプト -->
+  <!-- Application Script -->
   <script src="app.js"></script>
 </body>
 
