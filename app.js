@@ -265,5 +265,7 @@ try {
   /* ignore in dev */
 }
 
+test2
+
 // Initial display
 setStatus('Please select a file');
